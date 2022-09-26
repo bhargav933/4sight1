@@ -17,9 +17,8 @@ pipelines:
         type: Bash
         configuration:
           inputResources:
-            - name: myGitRepo
-          outputResources:
-            - name: myBuildInfo             
+            # Sets up step to be triggered when there are commit events to myFirstRepo
+            - name: Github
         execution:
           onExecute:
             - npm i
