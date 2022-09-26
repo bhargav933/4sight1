@@ -5,12 +5,12 @@ resources:
     type: GitRepo
     configuration:
       # SCM integration where the repository is located
-      gitProvider: .values.myRepo.gitProvider # this will be replaced from values.yml
+      gitProvider: Github # this will be replaced from values.yml
       # Repository path, including org name/repo name
-      path: .values.myRepo.path # this will be replaced from values.yml
+      path: vivek.trivedi@slscorp.com/docker-node # this will be replaced from values.yml
       branches:
         # Specifies which branches will trigger dependent steps
-        include: master
+        include: dev
  
   - name: myPropertyBag
     type: PropertyBag
