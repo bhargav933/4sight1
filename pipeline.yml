@@ -1,21 +1,45 @@
+template: true   # required for local templates
+valuesFilePath: ./values.yml
+
 resources:
-  - name: myGitRepo
+  - name: npm_repo_jfp_example
     type: GitRepo
     configuration:
-      gitProvider: Github
-      path: vivektrivedi-123/4sight
+      # SCM integration where the repository is located
+      gitProvider: {{ .Values.myRepo.gitProvider }}
+      # Repository path, including org name/repo name
+      path: {{ .Values.myRepo.path }}
       branches:
-        include: dev
-pipelines:  
-  - name: basic_pipeline
+        # Specifies which branches will trigger dependent steps
+        include: master
+
+  - name: npm_buildinfo_jfp_example
+    type: BuildInfo
     configuration:
-      environmentVariables:
-        readOnly:
-          my_env_var: "hello"  
+      sourceArtifactory: demoArt
+
+pipelines:
+  - name: npm_pipeline_jfp_example
     steps:
-      - name: step_1
-        type: Bash
-        execution:
-          onExecute:
-            - npm i
-            - npm run build
+      - name: npm_build_step
+        type: NpmBuild
+        configuration:
+          repositoryName: node-docker      # required, npm repository name on artifacctory
+          sourceLocation: .      # required, location of package.json file
+          integrations:
+            - name:  demoArt  # required
+          inputResources:
+            - name: npm_repo_jfp_example         # required
+
+      - name: npm_publish_step
+        type: NpmPublish
+        configuration:
+          # for payloadType npm:
+          repositoryName: node-docker        # required, npm repository name on artifactory
+          autoPublishBuildInfo: true       # optional
+          integrations:
+            - name: demoArt      # required
+          inputSteps:
+            - name: npm_build_step                # required
+          outputResources:
+            - name: npm_buildinfo_jfp_example                 # optional
