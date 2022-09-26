@@ -1,0 +1,4 @@
+myRepogitProvider: https://github.com/vivektrivedi-123/4sight.git
+myRepopath: vivektrivedi-123/4sight
+branches:
+  include: dev
