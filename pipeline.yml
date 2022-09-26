@@ -1,34 +1,29 @@
-template: false   # required for local templates
-valuesFilePath: ./values.yml
- 
 resources:
-  - name: myFirstRepo
+  - name: myGitRepo
     type: GitRepo
     configuration:
-      # SCM integration where the repository is located
-      gitProvider: {{ .values.myRepo.gitProvider }} # this will be replaced from values.yml
-      # Repository path, including org name/repo name
-      path: {{ .values.myRepo.path }} # this will be replaced from values.yml
+      gitProvider: Github
+      path: vivektrivedi-123/4sight
       branches:
-        # Specifies which branches will trigger dependent steps
         include: dev
- 
-  - name: myPropertyBag
-    type: PropertyBag
+  - name: myBuildInfo
+    type: BuildInfo
     configuration:
-      commitSha: 1
-      runID: 1
- 
-pipelines:
-  - name: my_first_pipeline
+pipelines:  
+  - name: basic_pipeline
+    configuration:
+      environmentVariables:
+        readOnly:
+          my_env_var: "hello"
     steps:
-      - name: p1_s1
+      - name: step_1
         type: Bash
         configuration:
           inputResources:
-            # Sets up step to be triggered when there are commit events to myFirstRepo
-            - name: myFirstRepo
+            - name: myGitRepo
+          outputResources:
+            - name: myBuildInfo             
         execution:
           onExecute:
-            npm i
-            npm run build
+            - npm i
+            - npm run build
