@@ -2,33 +2,44 @@ template: true   # required for local templates
 valuesFilePath: ./values.yml
 
 resources:
-  - name: myFirstRepo
+  - name: npm_repo_jfp_example
     type: GitRepo
     configuration:
       # SCM integration where the repository is located
-      gitProvider: {{ .Values.myRepo.gitProvider }} # this will be replaced from values.yml
+      gitProvider: {{ .Values.myRepo.gitProvider }}
       # Repository path, including org name/repo name
-      path: {{ .Values.myRepo.path }} # this will be replaced from values.yml
+      path: {{ .Values.myRepo.path }}
       branches:
         # Specifies which branches will trigger dependent steps
         include: master
 
-  - name: myPropertyBag
-    type: PropertyBag
+  - name: npm_buildinfo_jfp_example
+    type: BuildInfo
     configuration:
-      commitSha: 1
-      runID: 1
+      sourceArtifactory: demoArt
 
 pipelines:
-  - name: my_first_pipeline
+  - name: npm_pipeline_jfp_example
     steps:
-      - name: p1_s1
-        type: Bash
+      - name: npm_build_step
+        type: NpmBuild
         configuration:
+          repositoryName: vivek-trivedi      # required, npm repository name on artifacctory
+          sourceLocation: .      # required, location of package.json file
+          integrations:
+            - name:  demoArt  # required
           inputResources:
-            # Sets up step to be triggered when there are commit events to myFirstRepo
-            - name: myFirstRepo
-        execution:
-          onExecute:
-            - npm i
-            - npm run build
+            - name: npm_repo_jfp_example         # required
+
+      - name: npm_publish_step
+        type: NpmPublish
+        configuration:
+          # for payloadType npm:
+          repositoryName: vivek-trivedi        # required, npm repository name on artifactory
+          autoPublishBuildInfo: true       # optional
+          integrations:
+            - name: demoArt      # required
+          inputSteps:
+            - name: npm_build_step                # required
+          outputResources:
+            - name: npm_buildinfo_jfp_example                 # optional
