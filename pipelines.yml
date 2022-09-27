@@ -16,7 +16,8 @@ resources:
   - name: npm_buildinfo_jfp_example
     type: BuildInfo
     configuration:
-      sourceArtifactory: testing-demo
+      sourceArtifactory: Github
+
 
 pipelines:
   - name: npm_pipeline_jfp_example
@@ -27,7 +28,7 @@ pipelines:
           repositoryName: testing-npm      # required, npm repository name on artifacctory
           sourceLocation: .      # required, location of package.json file
           integrations:
-            - name:  testing-npm  # required
+            - name:  Github  # required
           inputResources:
             - name: npm_repo_jfp_example         # required
 
@@ -38,7 +39,7 @@ pipelines:
           repositoryName: testing-npm        # required, npm repository name on artifactory
           autoPublishBuildInfo: true       # optional
           integrations:
-            - name: testing-npm      # required
+            - name: Github      # required
           inputSteps:
             - name: npm_build_step                # required
           outputResources:
