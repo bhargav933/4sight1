@@ -16,7 +16,7 @@ resources:
   - name: npm_buildinfo_jfp_example
     type: BuildInfo
     configuration:
-      sourceArtifactory: vivek-trivedi
+      sourceArtifactory: demoArt
 
 pipelines:
   - name: npm_pipeline_jfp_example
@@ -24,10 +24,10 @@ pipelines:
       - name: npm_build_step
         type: NpmBuild
         configuration:
-          repositoryName: vivek-trivedi      # required, npm repository name on artifacctory
+          repositoryName: testing-npm      # required, npm repository name on artifacctory
           sourceLocation: .      # required, location of package.json file
           integrations:
-            - name:  vivek-trivedi  # required
+            - name:  demoArt  # required
           inputResources:
             - name: npm_repo_jfp_example         # required
 
@@ -35,7 +35,7 @@ pipelines:
         type: NpmPublish
         configuration:
           # for payloadType npm:
-          repositoryName: vivek-trivedi        # required, npm repository name on artifactory
+          repositoryName: testing-npm        # required, npm repository name on artifactory
           autoPublishBuildInfo: true       # optional
           integrations:
             - name: demoArt      # required
