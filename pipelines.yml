@@ -28,7 +28,7 @@ pipelines:
           repositoryName: testing-npm      # required, npm repository name on artifacctory
           sourceLocation: .      # required, location of package.json file
           integrations:
-            - name:  npm  # required
+            - name:  npm  # required (working properly)
           inputResources:
             - name: npm_repo_jfp_example         # required
 
